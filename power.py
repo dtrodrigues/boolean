@@ -6,6 +6,7 @@
 # Date: Feb 12, 2011
 
 from itertools import combinations
+import pdb
 
 # TODO: finish maxFree
 
@@ -52,7 +53,7 @@ class ps:
                     # the image of elt
                     if (item[0] in eltImage) and (item[1] in eltImage):
                         mids.append(item)
-            #print mids
+           # print mids
 
             for i in mids:
                 modModList = modList[:]
@@ -62,11 +63,14 @@ class ps:
                 modModList.remove(i[0])
                 modModList.remove(i[1])
 
+                #print i[0], i[1], modModList
                 if self.interDict(i[0], i[1], modModList):
+                    #print 'false'
                     return False
-
+                #else:
+                    #print i[0], "has no intersection with", i[1], "in", modModList
+        #print 'true'
         return True
-
 
     def makeDict(self, eltList):
         """returns a list of the elements in eltList indexed by their length"""
@@ -88,7 +92,7 @@ class ps:
 
     def interDict(self, elt1, elt2, elts):
         """returns True if the images of elt1 and elt2 have a non-trivial intersection in elts"""
-
+        #pdb.set_trace()
         im1 = self.imageList(elt1, elts)
         im2 = self.imageList(elt2, elts)
 
@@ -120,8 +124,6 @@ class ps:
             for j in theDict[i]:
                 if theDict[i].count(j) > 1:
                     return True
-                else:
-                    theDict[i].remove(j)
 
         return False
 
@@ -162,18 +164,37 @@ class ps:
 
     def maxFree(self, eltList):
         """returns the size of the largest subset of eltList that does not contain a diamond"""
-        # start to look at combinations of eltList of size 1 then
-        # checking if this subset is diamond free.  if one of them is, increase
-        # the size of combinations and check again
+        i=1
+        repeat = True
+        while repeat:
+            repeat = False
+            theList = []
+            temp = combinations(eltList, i)
+            for item in temp:
+                theList.append(list(item))
+
+            j = 0
+            while j < len(theList):
+                if self.diamondFree(theList[j]):
+                    success = len(theList[j])
+                    j = len(theList)
+                    repeat = True
+                j += 1
+            i += 1
+        return success
 
 def main():
     """docstring for main"""
-    a = ps(6)
-    #a.diamondFree(a.PowerSet)
-    #b = a.makeDict(a.imageList([1],a.PowerSet))
-    a.interDict([1,2], [1,3],[[1,4],[1,2,3],[1,3,5]])
-
+    pass
+#    a = ps(3)
+#    #a.diamondFree(a.PowerSet)
+#    #b = a.makeDict(a.imageList([1],a.PowerSet))
+#    print a.maxFree(a.PowerSet)
 
 if __name__ == '__main__':
     main()
-
+    #a = ps(5)
+    #a.diamondFree(a.PowerSet)
+    #b = a.makeDict(a.imageList([1],a.PowerSet))
+    #print a.maxFree(a.PowerSet)
+    #print a.diamondFree([[],[2],[3],[1,2],[1,3],[2,3]])
