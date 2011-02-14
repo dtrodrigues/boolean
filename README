@@ -1,1 +1,9 @@
-More stuff will go in here
+This is a very poorly-written calculator of the largest diamond-free set in the boolean lattice.  As of now, it only works up to n=4.  You must have Python installed on your computer. This has been tested on Python 2.6.6 but it should also work for most version of Python 2.x.  However, it likely will not work in Python 3.x.  In order to run, you must change to the directory containing power.py in the command prompt.  Then run the following command:
+
+python power.py
+
+This will check for the boolean lattice with n=4.  You can optionally give it a command line argument of the size of the lattice you wish to check.  Be warned that for n >= 5, it almost certainly will not work.  To run it for n=3, for example, run this command:
+
+python power.py 3
+
+Feel free to modify the code to make it less terrible.  The latest version of the code will be at http://github.com/dtrodrigues/boolean

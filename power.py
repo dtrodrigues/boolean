@@ -3,21 +3,17 @@
 # power.py
 # allows the user to explore the boolean lattice
 # Author: Dustin Rodrigues
-# Date: Feb 12, 2011
+# Date: Feb 14, 2011
+# Track changes at http://github.com/dtrodrigues/boolean
 
+import sys
 from itertools import combinations
-import pdb
 
-# TODO: finish maxFree
-
-
-# for readability, change class name from ps to PowerSet or Power or
-# something
-class ps:
+class PowerSet:
     """insert class documentation here"""
 
-    def __init__(self, x=5):
-        """initializes the powerset 2^[x].  default is 5"""
+    def __init__(self, x):
+        """initializes the powerset 2^[x]"""
         self.size = x
         self.PowerSet = []
         for i in range(0,x+1):
@@ -45,7 +41,6 @@ class ps:
 
             # removes items that have one mid candidate that is lower or
             # the same level as the bottom
-
             eltImage = self.imageList(elt, modList)
             for item in temp:
                 if (len(item[0]) > len(bot)) and (len(item[1]) > len(bot)):
@@ -53,27 +48,18 @@ class ps:
                     # the image of elt
                     if (item[0] in eltImage) and (item[1] in eltImage):
                         mids.append(item)
-           # print mids
 
             for i in mids:
                 modModList = modList[:]
-                #print modModList
-                #print i[0]
-                #print i[1]
                 modModList.remove(i[0])
                 modModList.remove(i[1])
 
-                #print i[0], i[1], modModList
                 if self.interDict(i[0], i[1], modModList):
-                    #print 'false'
                     return False
-                #else:
-                    #print i[0], "has no intersection with", i[1], "in", modModList
-        #print 'true'
         return True
 
     def makeDict(self, eltList):
-        """returns a list of the elements in eltList indexed by their length"""
+        """returns a dict of the elements in eltList indexed by their length"""
         eltDict = {}
         for elt in eltList:
             if len(elt) in eltDict:
@@ -92,7 +78,6 @@ class ps:
 
     def interDict(self, elt1, elt2, elts):
         """returns True if the images of elt1 and elt2 have a non-trivial intersection in elts"""
-        #pdb.set_trace()
         im1 = self.imageList(elt1, elts)
         im2 = self.imageList(elt2, elts)
 
@@ -127,7 +112,6 @@ class ps:
 
         return False
 
-
     def imageList(self, elt, elts):
         """takes a list or dict and returns a list of the elements of the image of elt (elements that contain elt)"""
         temp = []
@@ -161,7 +145,6 @@ class ps:
         """NOT IMPLEMENTED: returns the subposet indued between el1 and elt2 (with elt1 < elt2)"""
         pass
 
-
     def maxFree(self, eltList):
         """returns the size of the largest subset of eltList that does not contain a diamond"""
         i=1
@@ -184,17 +167,14 @@ class ps:
         return success
 
 def main():
-    """docstring for main"""
-    pass
-#    a = ps(3)
-#    #a.diamondFree(a.PowerSet)
-#    #b = a.makeDict(a.imageList([1],a.PowerSet))
-#    print a.maxFree(a.PowerSet)
+    """calculates the largest diamond-free subset based on the command line argument.  Default is 4."""
+    if len(sys.argv) <= 1:
+        size = 4
+    else:
+        size = sys.argv[1]
+
+    a = PowerSet(int(size))
+    print "The largest diamond-free set in the boolean lattice for n =", size, "is", a.maxFree(a.PowerSet)
 
 if __name__ == '__main__':
     main()
-    #a = ps(5)
-    #a.diamondFree(a.PowerSet)
-    #b = a.makeDict(a.imageList([1],a.PowerSet))
-    #print a.maxFree(a.PowerSet)
-    #print a.diamondFree([[],[2],[3],[1,2],[1,3],[2,3]])
